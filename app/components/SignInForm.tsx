@@ -30,8 +30,9 @@ export default function SignInForm()
         )
        
         const data = await res.json()
-        if(data.success)
+        if(data.message)
         {
+          setMessage('sign In successfully')
          router.push('/');
 
         }

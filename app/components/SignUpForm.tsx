@@ -24,6 +24,7 @@ export default function SignUpForm() {
         console.log(await res.text)
         const data = await res.json();
         if(data.success) {
+          setMessage('sign up successfully')
           router.push('/SignIn')
           } 
         else{setMessage(`${data.error}`)}
