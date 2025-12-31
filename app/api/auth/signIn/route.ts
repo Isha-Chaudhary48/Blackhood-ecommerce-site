@@ -1,6 +1,9 @@
 import pool from "@/lib/db";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
+
+
 export  async function POST(req: Request) {
 
     try {
@@ -27,13 +30,24 @@ export  async function POST(req: Request) {
                 { status: 401 })
         }
 
-        return NextResponse.json(
+        const token = jwt.sign(
             {
-                success: true,
-                
+                userId : user.id
             },
-            {status: 200}
-        )
+            process.env.JWT_SECRET!,
+            {expiresIn: "2h"}
+        );
+
+       const res = NextResponse.json({message: "Login Successfully"});
+
+       res.cookies.set("token",token,{
+        httpOnly:true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite:"strict",
+        maxAge:60*60*2,
+        path:'/'
+       });
+       return res;
     } 
     catch (err) {
         console.log(err);
