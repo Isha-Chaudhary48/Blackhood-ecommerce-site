@@ -1,6 +1,33 @@
+"use client"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 
 export default function Navbar() {
+  const [user,setUser] = useState<any>(null);
+  const [loading,setLoading] = useState(true);
+
+  useEffect(()=>
+  {
+    const fetchUser=()=>{
+      fetch('/api/me').then(async(res)=>{
+      if(!res.ok) {return null};
+      return res.json();
+
+    }).then((data)=>{
+      setUser(data);
+      setLoading(false);
+    })
+    }
+    fetchUser();
+
+    window.addEventListener("auth-changed",fetchUser);
+    return()=>{
+      window.removeEventListener("auth-changed",fetchUser)
+    }
+    
+  },[]);
+  if(loading) return null;
+
   return (
     <>
       <div className="flex items-center justify-between p-8 bg-pink-600 sm:p-4 md:p-8 sm:px-4 text-white mb-5  " >
@@ -17,9 +44,20 @@ export default function Navbar() {
           <Link href="/YourCart">
             <button className="text-white">Cart</button>
           </Link>
-          <Link href="/SignIn">
+          {
+            user ?(
+               <Link href="/Profile">
+            <button className="text-white">Profile</button>
+          </Link>
+
+            ) : (
+               <Link href="/SignIn">
             <button className="text-white">Sign In </button>
           </Link>
+
+            )
+          }
+         
         </div>
       </div></>
   )
