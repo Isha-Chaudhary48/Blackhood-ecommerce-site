@@ -19,7 +19,7 @@ export default function FavouriteHeart({_id}: FavouriteHeartProps)
         }
     },[_id])
 
-    function handleClick(e: React.MouseEvent<HTMLButtonElement>){
+    function handleClick(e: React.MouseEvent){
         e.stopPropagation();
         e.preventDefault();
         let stored: number[] = JSON.parse(
