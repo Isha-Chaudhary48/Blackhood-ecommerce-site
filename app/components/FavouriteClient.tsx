@@ -76,6 +76,7 @@ export default function FavouriteClient()
                   src={product.image}
                   alt={product.title}
                   fill
+                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover rounded"
                 />
                 <div className="absolute  bottom-0 text-center gap-1 bg-black w-full opacity-100 transition-opacity group-hover:opacity-0 ">
