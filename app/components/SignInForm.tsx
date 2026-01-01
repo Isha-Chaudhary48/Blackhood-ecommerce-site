@@ -34,6 +34,8 @@ export default function SignInForm()
         {
           setMessage('sign In successfully')
          router.push('/');
+         window.dispatchEvent(new Event("auth-changed"));
+
 
         }
         else{
