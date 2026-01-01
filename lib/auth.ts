@@ -3,8 +3,9 @@ import { cookies } from "next/headers"
 
 type JwtPayload={
     userId : number;
+    email: string;
 };
-export  async function getAuthUser()
+export  async function getAuthUser() : Promise<JwtPayload | null>
 {
     const cookie = await cookies();
     const token = cookie.get("token")?.value;
