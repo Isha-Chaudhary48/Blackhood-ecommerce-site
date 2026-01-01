@@ -29,7 +29,7 @@ export default function FavouriteClient()
     
     
    
-    const [ products, setProducts] = useState<number[]>([])
+    const [ products, setProducts] = useState<Product[]>([])
 
 
     useEffect(()=>{
