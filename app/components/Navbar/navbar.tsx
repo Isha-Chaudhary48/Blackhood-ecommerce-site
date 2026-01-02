@@ -1,10 +1,13 @@
 "use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import ProfileDrawer from "../ProfileDrawer";
 
 export default function Navbar() {
   const [user,setUser] = useState<any>(null);
   const [loading,setLoading] = useState(true);
+  const [open,setOpen] = useState(false);
+  
 
   useEffect(()=>
   {
@@ -46,9 +49,17 @@ export default function Navbar() {
           </Link>
           {
             user ?(
-               <Link href="/Profile">
-            <button className="text-white">Profile</button>
-          </Link>
+              <div>
+                <button onClick={()=>setOpen(true)} className="text-white">Profile</button>
+             <ProfileDrawer
+        open={open}
+        setOpen={setOpen}
+      />
+              </div>
+              
+            
+          
+          
 
             ) : (
                <Link href="/SignIn">
