@@ -76,7 +76,7 @@ export default async function productPage({ params }: Props) {
             <p className="mt-2 text-gray-500 text-lg">Stock: {product.stock}</p>
             <p className="mt-2 text-gray-500 text-lg">Rating: {product.rating}</p>
             <div className="mt-4 text-center"><Button>Add to Bag</Button>
-            <Button className="ml-5"><FavouriteHeart _id = {product._id}/>Add to wishlist</Button></div></div>
+            <Button className="ml-5 "><FavouriteHeart _id = {product._id}/></Button></div></div>
         </CardContent>
 
 

@@ -57,7 +57,7 @@ export default async function Home() {
                   <span className="ml-2 text-gray-500 text-sm">{product.rating.toFixed(1)}</span>
                 </div>
               
-                <button className=" absolute bottom-2 text-black bg-white opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2">  <FavouriteHeart _id={product._id}/> Add to wishlist</button>
+                <button className=" absolute bottom-2 text-black bg-white opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2">  <FavouriteHeart _id={product._id}/></button>
               </div>
               
               
