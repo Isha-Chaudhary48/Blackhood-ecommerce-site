@@ -33,7 +33,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex items-center justify-between p-8 bg-pink-600 sm:p-4 md:p-8 sm:px-4 text-white mb-5  " >
+      <div className="flex items-center justify-between p-4 md:p-8 bg-zinc-900 sm:p-4 md:p-8 sm:px-4 text-white mb-5  " >
         <Link href="/">
           <h1 className="text-xl font-bold  ">Blackhood</h1>
         </Link>
