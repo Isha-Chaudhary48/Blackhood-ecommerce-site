@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt"
 
 
-export  async function POST(req: Request) {
+export async function POST(req: Request) {
 
     try {
         const { email, password } = await req.json();
@@ -19,6 +19,12 @@ export  async function POST(req: Request) {
             );
         }
         const user = userResult.rows[0];
+        if (!user.is_verified) {
+            return NextResponse.json({
+                message: "Please verify your email before logging In"
+            },
+                { status: 403 })
+        }
 
         const isPasswordCorrect = await bcrypt.compare(
             password, user.password
@@ -32,30 +38,32 @@ export  async function POST(req: Request) {
 
         const token = jwt.sign(
             {
-                userId : user.id
+                userId: user.id
             },
             process.env.JWT_SECRET!,
-            {expiresIn: "2h"}
+            { expiresIn: "2h" }
         );
 
-       const res = NextResponse.json({message: "Login Successfully"});
+        const res = NextResponse.json({ message: "Login Successfully" },
+            {status:200}
+        );
 
-       res.cookies.set("token",token,{
-        httpOnly:true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite:"strict",
-        maxAge:60*60*2,
-        path:'/'
-       });
-       return res;
-    } 
+        res.cookies.set("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 60 * 60 * 2,
+            path: '/'
+        });
+        return res;
+    }
     catch (err) {
         console.log(err);
         return NextResponse.json(
             {
                 error: "Internal server error"
             }
-            ,{
+            , {
                 status: 500
             }
         );
