@@ -30,16 +30,18 @@ export default function SignInForm()
         )
        
         const data = await res.json()
-        if(data.message)
+        if(res.ok)
         {
-          setMessage('sign In successfully')
-         router.push('/');
+          setMessage(data.message)
+            router.push('/');
+        
          window.dispatchEvent(new Event("auth-changed"));
+        
 
 
         }
         else{
-          setMessage(`Invalid Email or Password`)
+          setMessage(data.message)
         }
 
         }
