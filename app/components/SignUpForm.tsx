@@ -24,8 +24,8 @@ export default function SignUpForm() {
         console.log(await res.text)
         const data = await res.json();
         if(data.success) {
-          setMessage('sign up successfully')
-          router.push('/SignIn')
+          setMessage('Sign up successfully! Please check our email and verify your account with  your registered email')
+          
           } 
         else{setMessage(`${data.error}`)}
 
@@ -91,7 +91,7 @@ export default function SignUpForm() {
                   <label >If account already exists <Link className="text-sm text-blue-600" href="/SignIn">Sign In</Link></label>
                   
                 </div>
-                 <div> {message}</div>
+                 <div className="text-red-700 flex justify-center mt-2"> {message}</div>
 
         </CardContent>
        
