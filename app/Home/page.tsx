@@ -1,8 +1,16 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
-import Link from "next/link"
-import FavouriteHeart from "../components/FavouriteHeart"
+import { Button } from "@/components/ui/button"
+import ToggleFavourite from "@/app/components/ToggleFavourite"
+import { FetchFavourites } from "@/app/hooks/FetchFavourites"
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import Loading from "../components/Loading";
+
+
 
 
 type Product = {
@@ -23,14 +31,34 @@ type Product = {
 
 
 }
-type ProductsResponse = {
-  data: Product[]
-}
-export default async function Home() {
-  const res = await fetch(`https://fakestoreapiserver.reactbd.org/api/products?page=1&perPage=20
-`)
-  const result: ProductsResponse = await res.json()
-  const products = result.data
+
+export default  function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+   
+   const { favourites, setFavourites, loading:favLoading } = FetchFavourites();
+   const [loading, setLoading] = useState(true);
+ 
+ 
+   useEffect(()=>{
+      async function fetchProducts() {
+      
+       const res = await fetch(`/api/productPage/`);
+       const data = await res.json();
+       setProducts(data.products);
+       setLoading(false);
+ 
+ 
+ 
+     }
+     fetchProducts();
+   },[]);
+   if(loading || favLoading )
+   {
+     return(<>
+     <Loading/>
+   </>)
+   }
+  
   console.log(products)
   return (<>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
@@ -57,7 +85,7 @@ export default async function Home() {
                   <span className="ml-2 text-gray-500 text-sm">{product.rating.toFixed(1)}</span>
                 </div>
               
-                <button className=" absolute bottom-2 text-black bg-white opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2">  <FavouriteHeart _id={product._id}/></button>
+                <div className=" absolute bottom-2 text-black opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2"><ToggleFavourite productId={product._id.toString()} favourites={favourites} setFavourites={setFavourites} />  </div>
               </div>
               
               
