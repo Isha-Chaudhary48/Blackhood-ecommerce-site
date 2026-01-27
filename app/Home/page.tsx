@@ -12,7 +12,6 @@ import Loading from "../components/Loading";
 
 
 
-
 type Product = {
   _id: number,
   title: string,
@@ -94,7 +93,7 @@ export default  function Home() {
               <CardTitle>{product.title} </CardTitle>
               <span className="text-gray-500 text-lg"> {product.brand}  {product.isNew && <Badge variant="outline">New</Badge>}</span>
              
-              <p className="mt-2 text-lg font-semibold">${product.price}  <span className="text-gray-500 line-through text-sm ml-2">${product.oldPrice}</span> <span className="text-sm text-orange-600">({product.discountedPrice/10}%)</span></p>
+              <p className="mt-2 text-lg font-semibold">Rs. {product.price * 10}  <span className="text-gray-500 line-through text-sm ml-2">Rs. {product.oldPrice}</span> <span className="text-sm text-orange-600">({product.discountedPrice/10}%)</span></p>
             </CardHeader>
           </Card>
         </Link>
