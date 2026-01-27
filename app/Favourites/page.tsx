@@ -46,15 +46,18 @@ const [loading,setLoading] = useState(true)
   },[favourites])
 
 
+  
+  if(favourites.length === 0)
+  {
+
+    return(<><div className="flex justify-center items-center font-semibold text-2xl ">No favourites yet.</div></>)
+  }
   if(loading || favLoading)
   {
     return (<>
+   
     <Loading/>
     </>)
-  }
-  if(favourites.length === 0)
-  {
-    return(<>No favourites yet.</>)
   }
   
   return(<>
@@ -91,7 +94,7 @@ const [loading,setLoading] = useState(true)
               <CardTitle>{product?.title} </CardTitle>
               <span className="text-gray-500 text-lg"> {product?.brand}  </span>
          
-              <p className="mt-2 text-lg font-semibold">${product?.price}  <span className="text-gray-500 line-through text-sm ml-2">${product?.oldPrice}</span> <span className="text-sm text-orange-600">({product?.discountedPrice/10}%)</span></p>
+              <p className="mt-2 text-lg font-semibold">Rs. {product?.price * 10}   <span className="text-gray-500 line-through text-sm ml-2">Rs.{product?.oldPrice}</span> <span className="text-sm text-orange-600">({product?.discountedPrice/10}%)</span></p>
             </CardHeader>
           </Card>
         </Link>
