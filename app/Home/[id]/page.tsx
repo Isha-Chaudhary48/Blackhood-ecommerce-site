@@ -8,6 +8,10 @@ import { FetchFavourites } from "@/app/hooks/FetchFavourites"
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Loading from "@/app/components/Loading";
+import { AddToCart } from "@/app/services/cartService";
+import {toast} from "react-hot-toast"
+import { useRouter } from "next/navigation";
+
 
 
 type Product = {
@@ -29,6 +33,7 @@ type Product = {
 
 
 export default function productPage() {
+  const router = useRouter();
   const params = useParams();
   const productId = params?.id;
   console.log(productId)
@@ -36,6 +41,10 @@ export default function productPage() {
 
   const { favourites, setFavourites, loading: favLoading } = FetchFavourites();
   const [loading, setLoading] = useState(true);
+  const [selectedSize , setSelectedSize] = useState<string | null >(null);
+  const [isAdding,setIsAdding] = useState(false);
+
+
 
 
   useEffect(() => {
@@ -56,6 +65,49 @@ export default function productPage() {
   if (loading || favLoading) {
     return (<>
      <Loading/></>)
+  }
+  console.log(selectedSize)
+  
+
+  async function handleAddToCart()
+  {
+    if(!selectedSize)
+    {
+      console.log("please select size first")
+      toast.error("Please select a size first");
+      return;
+    }
+    
+    if (!productId) {
+    toast.error("Product not found");
+    return;
+  }
+
+    const pId = Array.isArray(productId)? productId[0] : productId
+    console.log("pid",pId)
+    try{
+      setIsAdding(true)
+      const res = await AddToCart({
+        product_id: pId,
+        size: selectedSize,
+        quantity: 1
+
+
+
+      });
+      toast.success("Added to Cart")
+      
+    
+    }
+    catch(error: any)
+    {
+      toast.error(error.message || "something went wrong with you cart")
+      
+
+    }
+    finally {
+      setIsAdding(false)
+    }
   }
 
   return (<>
@@ -83,8 +135,8 @@ export default function productPage() {
             {product?.isNew && <Badge variant="destructive">New</Badge>}
           </CardHeader>
             <p className="mt-4 text-2xl font-bold">
-              ${product?.price}
-              <span className="text-gray-500 line-through text-sm ml-2">${product?.oldPrice}</span>
+              {`Rs. ${product ? product.price * 10 : ""}`}
+              <span className="text-gray-500 line-through text-sm ml-2">Rs. {product?.oldPrice}</span>
               <span className="text-sm text-orange-600">
                 ({product ? Math.round((Number(product.oldPrice) - product.discountedPrice) / Number(product.oldPrice) * 100) : 0}% off)
               </span>
@@ -95,12 +147,13 @@ export default function productPage() {
               {
 
                 product?.size.map((s) => (
-                  <div key={s} className="flex gap-2 flex-col"><button className="h-8 w-8 rounded-full border-2 border-black 
-                 flex items-center justify-center text-sm hover:bg-red-600 hover:text-white
-                 " >   {s}</button></div>
+                  <div key={s} className="flex gap-2 flex-col"><button className=
+                 { `h-8 w-8 rounded-full border-2 border-black 
+                 flex items-center justify-center text-sm ${selectedSize===s ? "bg-black text-white border-black": " bg-white text-black border-black"}`}  onClick={()=>setSelectedSize(s)}>   {s}</button></div>
                 ))
               }
             </div>
+            
 
             <p className="mt-2 text-gray-500 text-lg">Brand: {product?.brand}</p>
             <p className="mt-2 text-gray-500 text-lg">Category: {product?.category}</p>
@@ -111,7 +164,8 @@ export default function productPage() {
               <div className="ml-5 flex gap-4 mt-4">
                 
                 <ToggleFavourite productId={product?._id.toString() || ""} favourites={favourites} setFavourites={setFavourites} />
-                <Button>Add to Bag</Button>
+                <Button disabled={isAdding } onClick={handleAddToCart} >{
+                  isAdding ? "Adding..." : "Add to Cart"}</Button>
               </div>
             </div>
         </CardContent>
