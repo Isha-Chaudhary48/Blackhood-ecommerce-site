@@ -62,11 +62,13 @@ export default function ProfileDrawer(
           <h2 className="text-lg font-semibold">Profile</h2>
           <button onClick={() => setOpen(false)}>✕</button>
         </div>
+       
 
        {user ? (
   <div  className=" h-[100vh] mt-5">
     <div className="sm:p-2 text-center">
     <strong className="p-2">Email:</strong> {user.email}
+    <div className="font-semibold text-lg p-2"><a href="/Orders"> Orders</a></div>
     <div className="p-2"> <LogoutButton /></div>
     </div>
     <div className=" absolute bottom-0 ">
