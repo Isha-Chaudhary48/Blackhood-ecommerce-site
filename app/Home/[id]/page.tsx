@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Loading from "@/app/components/Loading";
 import { AddToCart } from "@/app/services/cartService";
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 
@@ -41,8 +42,9 @@ export default function productPage() {
 
   const { favourites, setFavourites, loading: favLoading } = FetchFavourites();
   const [loading, setLoading] = useState(true);
-  const [selectedSize , setSelectedSize] = useState<string | null >(null);
-  const [isAdding,setIsAdding] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isInCart, setIsInCart] = useState(false)
 
 
 
@@ -64,29 +66,28 @@ export default function productPage() {
   }, [productId]);
   if (loading || favLoading) {
     return (<>
-     <Loading/></>)
+      <Loading /></>)
   }
   console.log(selectedSize)
-  
 
-  async function handleAddToCart()
-  {
-    if(!selectedSize)
-    {
+
+  async function handleAddToCart() {
+    if (!selectedSize) {
       console.log("please select size first")
       toast.error("Please select a size first");
       return;
     }
-    
-    if (!productId) {
-    toast.error("Product not found");
-    return;
-  }
 
-    const pId = Array.isArray(productId)? productId[0] : productId
-    console.log("pid",pId)
-    try{
+    if (!productId) {
+      toast.error("Product not found");
+      return;
+    }
+
+    const pId = Array.isArray(productId) ? productId[0] : productId
+    console.log("pid", pId)
+    try {
       setIsAdding(true)
+
       const res = await AddToCart({
         product_id: pId,
         size: selectedSize,
@@ -95,14 +96,14 @@ export default function productPage() {
 
 
       });
+      setIsInCart(true)
       toast.success("Added to Cart")
-      
-    
+
+
     }
-    catch(error: any)
-    {
+    catch (error: any) {
       toast.error(error.message || "something went wrong with you cart")
-      
+
 
     }
     finally {
@@ -122,6 +123,7 @@ export default function productPage() {
                 src={product?.image}
                 alt={product?.title}
                 fill
+                priority
 
                 className="object-cover rounded-lg"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -148,26 +150,35 @@ export default function productPage() {
 
                 product?.size.map((s) => (
                   <div key={s} className="flex gap-2 flex-col"><button className=
-                 { `h-8 w-8 rounded-full border-2 border-black 
-                 flex items-center justify-center text-sm ${selectedSize===s ? "bg-black text-white border-black": " bg-white text-black border-black"}`}  onClick={()=>setSelectedSize(s)}>   {s}</button></div>
+                    {`h-8 w-8 rounded-full border-2 border-black 
+                 flex items-center justify-center text-sm ${selectedSize === s ? "bg-black text-white border-black" : " bg-white text-black border-black"}`} onClick={() => setSelectedSize(s)}>   {s}</button></div>
                 ))
               }
             </div>
-            
+
 
             <p className="mt-2 text-gray-500 text-lg">Brand: {product?.brand}</p>
             <p className="mt-2 text-gray-500 text-lg">Category: {product?.category}</p>
             <p className="mt-2 text-gray-500 text-lg">Stock: {product?.stock}</p>
             <p className="mt-2 text-gray-500 text-lg">Rating: {product?.rating}</p>
-            
-              
-              <div className="ml-5 flex gap-4 mt-4">
-                
-                <ToggleFavourite productId={product?._id.toString() || ""} favourites={favourites} setFavourites={setFavourites} />
-                <Button disabled={isAdding } onClick={handleAddToCart} >{
-                  isAdding ? "Adding..." : "Add to Cart"}</Button>
-              </div>
+
+
+            <div className="ml-5 flex gap-4 mt-4">
+
+              <ToggleFavourite productId={product?._id.toString() || ""} favourites={favourites} setFavourites={setFavourites} />
+              {
+                isInCart ? (
+                  <Link href="/YourCart"> <Button>Go to Cart<span>&mdash;&gt;</span></Button></Link>
+                ) :
+                  (
+                    <Button disabled={isAdding} onClick={handleAddToCart} >{
+                      isAdding ? "Adding..." : "Add to Cart"}</Button>
+
+                  )
+              }
+
             </div>
+          </div>
         </CardContent>
 
 
@@ -182,3 +193,4 @@ export default function productPage() {
   </>)
 
 }
+
