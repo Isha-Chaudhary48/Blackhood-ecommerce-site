@@ -31,36 +31,35 @@ type Product = {
 
 }
 
-export default  function Home() {
+export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
-   
-   const { favourites, setFavourites, loading:favLoading } = FetchFavourites();
-   const [loading, setLoading] = useState(true);
- 
- 
-   useEffect(()=>{
-      async function fetchProducts() {
-      
-       const res = await fetch(`/api/productPage/`);
-       const data = await res.json();
-       setProducts(data.products);
-       setLoading(false);
- 
- 
- 
-     }
-     fetchProducts();
-   },[]);
-   if(loading || favLoading )
-   {
-     return(<>
-     <Loading/>
-   </>)
-   }
-  
+
+  const { favourites, setFavourites, loading: favLoading } = FetchFavourites();
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    async function fetchProducts() {
+
+      const res = await fetch(`/api/productPage/`);
+      const data = await res.json();
+      setProducts(data.products);
+      setLoading(false);
+
+
+
+    }
+    fetchProducts();
+  }, []);
+  if (loading || favLoading) {
+    return (<>
+      <Loading />
+    </>)
+  }
+
   console.log(products)
   return (<>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-8">
       {products.map((product) => (
         <Link key={product._id} href={`Home/${product._id}`}>
 
@@ -72,6 +71,7 @@ export default  function Home() {
                   src={product.image}
                   alt={product.title}
                   fill
+                  priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover rounded"
                 />
@@ -83,17 +83,17 @@ export default  function Home() {
                   ))}
                   <span className="ml-2 text-gray-500 text-sm">{product.rating.toFixed(1)}</span>
                 </div>
-              
+
                 <div className=" absolute bottom-2 text-black opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2"><ToggleFavourite productId={product._id.toString()} favourites={favourites} setFavourites={setFavourites} />  </div>
               </div>
-              
-              
+
+
             </CardContent>
             <CardHeader>
               <CardTitle>{product.title} </CardTitle>
               <span className="text-gray-500 text-lg"> {product.brand}  {product.isNew && <Badge variant="outline">New</Badge>}</span>
-             
-              <p className="mt-2 text-lg font-semibold">Rs. {product.price * 10}  <span className="text-gray-500 line-through text-sm ml-2">Rs. {product.oldPrice}</span> <span className="text-sm text-orange-600">({product.discountedPrice/10}%)</span></p>
+
+              <p className="mt-2 text-lg font-semibold">Rs. {product.price * 10}  <span className="text-gray-500 line-through text-sm ml-2">Rs. {product.oldPrice}</span> <span className="text-sm text-orange-600">({product.discountedPrice / 10}%)</span></p>
             </CardHeader>
           </Card>
         </Link>
