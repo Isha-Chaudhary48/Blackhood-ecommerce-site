@@ -1,11 +1,13 @@
 "use client"
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { FetchFavourites } from "../hooks/FetchFavourites"
-import { CardContent ,Card,CardHeader,CardTitle } from "@/components/ui/card";
+import { CardContent, Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import ToggleFavourite from "../components/ToggleFavourite";
 import Loading from "../components/Loading";
+import { Button } from '@/components/ui/button'
+import { useRouter } from "next/navigation";
 
 type Product = {
   _id: number,
@@ -24,17 +26,16 @@ type Product = {
 
 };
 
-export default function FavouritePage()
-{
-  const { favourites, setFavourites, loading:favLoading } = FetchFavourites();
-  const [products,setProducts] = useState<Product[]>([]);
-const [loading,setLoading] = useState(true)
+export default function FavouritePage() {
+  const router = useRouter();
+  const { favourites, setFavourites, loading: favLoading } = FetchFavourites();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true)
 
-  useEffect(()=>{
-    async function fetchProducts()
-    {
-      if(favourites.length === 0)
-      {
+
+  useEffect(() => {
+    async function fetchProducts() {
+      if (favourites.length === 0) {
         return;
       }
       const res = await fetch(`/api/products?ids=${favourites.join(",")}`)
@@ -43,25 +44,34 @@ const [loading,setLoading] = useState(true)
       setLoading(false)
     }
     fetchProducts();
-  },[favourites])
+  }, [favourites])
 
-
-  
-  if(favourites.length === 0)
-  {
-
-    return(<><div className="flex justify-center items-center font-semibold text-2xl ">No favourites yet.</div></>)
+  function handleShopNow() {
+    router.push('/Home')
   }
-  if(loading || favLoading)
-  {
+
+
+
+  if (favourites.length === 0) {
+
     return (<>
-   
-    <Loading/>
+      <div className="h-[50vh] flex flex-col justify-center items-center text-center">
+        <p className="font-semibold text-2xl">No favorites yet.</p>
+        <p> Tap ❤️ on products you love to add them here.</p>
+        <Button className="mt-3" onClick={handleShopNow}>Shop Now</Button>
+      </div>
+
     </>)
   }
-  
-  return(<>
- <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+  if (loading || favLoading) {
+    return (<>
+
+      <Loading />
+    </>)
+  }
+
+  return (<>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
       {products.map((product) => (
         <Link key={product._id} href={`Home/${product._id}`}>
 
@@ -84,17 +94,17 @@ const [loading,setLoading] = useState(true)
                   ))}
                   <span className="ml-2 text-gray-500 text-sm">{product.rating.toFixed(1)}</span>
                 </div>
-              
+
                 <div className=" absolute bottom-2 text-black  opacity-0 group-hover:opacity-100 transition-opacity  transition rounded-lg p-2"> <ToggleFavourite productId={product._id.toString()} favourites={favourites} setFavourites={setFavourites} />  </div>
               </div>
-              
-              
+
+
             </CardContent>
             <CardHeader>
               <CardTitle>{product?.title} </CardTitle>
               <span className="text-gray-500 text-lg"> {product?.brand}  </span>
-         
-              <p className="mt-2 text-lg font-semibold">Rs. {product?.price * 10}   <span className="text-gray-500 line-through text-sm ml-2">Rs.{product?.oldPrice}</span> <span className="text-sm text-orange-600">({product?.discountedPrice/10}%)</span></p>
+
+              <p className="mt-2 text-lg font-semibold">Rs. {product?.price * 10}   <span className="text-gray-500 line-through text-sm ml-2">Rs.{product?.oldPrice}</span> <span className="text-sm text-orange-600">({product?.discountedPrice / 10}%)</span></p>
             </CardHeader>
           </Card>
         </Link>
