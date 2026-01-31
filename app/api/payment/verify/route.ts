@@ -5,13 +5,16 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
     try {
         const {
-            razorpay_order_id,
+            razorpayOrderId,
             razorpay_payment_id,
             razorpay_signature,
-            orderId,
-        } = await req.json();
 
-        const body = razorpay_order_id + "|" + razorpay_payment_id;
+        } = await req.json();
+        if (!razorpayOrderId || !razorpay_payment_id || !razorpay_signature) {
+            return NextResponse.json({ success: false, message: "Missing payment details" }, { status: 400 });
+        }
+
+        const body = razorpayOrderId + "|" + razorpay_payment_id;
 
         const expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_TEST_KEY_SECRET!).update(body).digest('hex')
         console.log(expectedSignature)
@@ -27,10 +30,17 @@ export async function POST(req: Request) {
         }
 
         const orderRes = await pool.query(
-            `SELECT user_id FROM orders WHERE id= $1`, [orderId]
+            `SELECT id, user_id FROM orders WHERE razorpay_order_id = $1`, [razorpayOrderId]
 
         );
+        if (orderRes.rowCount === 0) {
+            return NextResponse.json({
+                message: "order not found",
+                success: false
+            })
+        }
         const userId = orderRes.rows[0].user_id;
+        const orderId = orderRes.rows[0].id;
 
         const cartRes = await pool.query(
             `SELECT id from carts WHERE user_id = $1`, [userId]
@@ -61,10 +71,9 @@ export async function POST(req: Request) {
         await pool.query(
             `UPDATE orders 
              SET payment_status = 'PAID',
-             status='DONE',
-            razorpay_order_id= $1,
-            razorpay_payment_id=$2
-            WHERE id = $3`, [razorpay_order_id, razorpay_payment_id, orderId]
+             status='IN TRANSIT',
+            razorpay_payment_id=$1
+            WHERE id = $2`, [razorpay_payment_id, orderId]
         );
         return NextResponse.json({
             success: true,
