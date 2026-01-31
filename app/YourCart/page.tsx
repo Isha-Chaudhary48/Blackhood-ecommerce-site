@@ -8,9 +8,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
 import { loadRazorpay, openRazorpay } from "@/lib/razorpayClient";
+import { useRouter } from "next/navigation";
 
 export default function YourCart() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const router = useRouter();
+  const [cartItems, setCartItems] = useState<TCartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
 
@@ -42,9 +44,7 @@ export default function YourCart() {
 
     }
     fetchCartItems();
-  }
-
-    , []);
+  }, []);
 
   const updateQuantity = async (itemId: string, newQty: number) => {
 
@@ -67,8 +67,6 @@ export default function YourCart() {
       }
     )
 
-
-
   };
 
   const deleteItem = async (itemId: string) => {
@@ -88,26 +86,29 @@ export default function YourCart() {
 
   }
 
-
-
   if (loading) {
-    return (<>
-      <Loading /></>)
+    return <Loading />
   }
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const getTotalAmount = () => {
+    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+
+
+  }
+
+
   const handlePayment = async () => {
+
 
     try {
 
       const pendingPaymentRes = await fetch('/api/order/createPending', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ totalAmount: totalPrice })
+        body: JSON.stringify({ totalAmount: getTotalAmount() })
 
       });
-
-
       const data = await pendingPaymentRes.json();
+
       const loaded = await loadRazorpay();
       if (!loaded) {
         alert("Razorpay failed to load");
@@ -115,14 +116,12 @@ export default function YourCart() {
       }
       console.log(data)
       openRazorpay({
-
-        orderId: data.internalOrderId,
-        razorpay_order_id: data.razorpay_order_id,
-        amount: data.amount
-
-
+        razorpayOrderId: data.razorpay_order_id,
+        amount: data.amount,
+        onSuccess: () => { router.push('/Orders') }
 
       });
+
     }
     catch (error) {
       console.error("Checkout error", error);
@@ -198,7 +197,7 @@ export default function YourCart() {
 
                   </div>
                   <p className="mt-2 text-lg font-semibold">
-                    Rs. {item.price }{" "}
+                    Rs. {item.price}{" "}
                     {item.oldPrice && (
                       <span className="text-gray-500 line-through text-sm ml-2">
                         Rs. {item.oldPrice}
@@ -224,7 +223,7 @@ export default function YourCart() {
           <hr className="border border-1 border-white " ></hr>
           <p className=" text-lg">Price details:</p>
           <div className="   text-xl font-bold">
-            Total price :  Rs. {(totalPrice ).toFixed(1)}
+            Total price :  Rs. {(getTotalAmount()).toFixed(1)}
 
           </div>
 
