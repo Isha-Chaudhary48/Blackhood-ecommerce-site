@@ -67,7 +67,7 @@ export default function OrdersPage() {
                                 <Link
 
                                     href={`/Home/${order.product_id}`}
-                                    className=" flex justify-center items-center gap-4   "
+                                    className=" flex justify-center items-center gap-1   "
 
                                 >
 
@@ -92,8 +92,8 @@ export default function OrdersPage() {
 
                                     <div className="p-8">
                                         <CardTitle className="text-xl font-bold">{order.product_name}</CardTitle>
-                                        <div><span>Rs. {order.price}</span></div>
-                                        <div className="font-semibold text-sm text-gray-500  flex  md:flex gap-2  ">
+                                        <div className="mt-2 font-semibold "><span>Rs. {order.price}</span></div>
+                                        <div className="font-semibold text-sm text-gray-500  flex  md:flex gap-1 mt-2  ">
                                             <span >Size: {order.size}</span> <span className="text-black">|</span>
                                             <span >Qty: {order.quantity}</span>
                                         </div>
@@ -122,7 +122,7 @@ export default function OrdersPage() {
                                                             day: "2-digit",
                                                             month: "short",
                                                         })}</div>
-                                                        {order.status === 'IN TRANSIT' && <div className="text-blue-600 font-semibold ">🟢In Transit</div>}
+                                                        {order.status === 'IN TRANSIT' && <div className="text-blue-600 font-semibold "><span className="text-sm">🟢</span>In Transit</div>}
                                                     </div>
                                                 )
                                         }

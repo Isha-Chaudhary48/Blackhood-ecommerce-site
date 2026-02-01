@@ -4,32 +4,31 @@ import Link from "next/link"
 import ProfileDrawer from "../ProfileDrawer";
 
 export default function Navbar() {
-  const [user,setUser] = useState<any>(null);
-  const [loading,setLoading] = useState(true);
-  const [open,setOpen] = useState(false);
-  
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
-  useEffect(()=>
-  {
-    const fetchUser=()=>{
-      fetch('/api/me').then(async(res)=>{
-      if(!res.ok) {return null};
-      return res.json();
 
-    }).then((data)=>{
-      setUser(data);
-      setLoading(false);
-    })
+  useEffect(() => {
+    const fetchUser = () => {
+      fetch('/api/me').then(async (res) => {
+        if (!res.ok) { return null };
+        return res.json();
+
+      }).then((data) => {
+        setUser(data);
+        setLoading(false);
+      })
     }
     fetchUser();
 
-    window.addEventListener("auth-changed",fetchUser);
-    return()=>{
-      window.removeEventListener("auth-changed",fetchUser)
+    window.addEventListener("auth-changed", fetchUser);
+    return () => {
+      window.removeEventListener("auth-changed", fetchUser)
     }
-    
-  },[]);
-  if(loading) return null;
+
+  }, []);
+  if (loading) return null;
 
   return (
     <>
@@ -37,7 +36,7 @@ export default function Navbar() {
         <Link href="/">
           <h1 className="text-xl font-bold  ">Blackhood</h1>
         </Link>
-        <div className="flex gap-4 ">
+        <div className="flex  sm:text-sm md:text-base md:gap-4  gap-2">
           <Link href="/Home">
             <button className="text-white ">Home </button>
           </Link>
@@ -48,27 +47,27 @@ export default function Navbar() {
             <button className="text-white">Cart</button>
           </Link>
           {
-            user ?(
+            user ? (
               <div>
-                <button onClick={()=>setOpen(true)} className="text-white">Profile</button>
-             <ProfileDrawer
-        open={open}
-        setOpen={setOpen}
-      />
+                <button onClick={() => setOpen(true)} className="text-white">Profile</button>
+                <ProfileDrawer
+                  open={open}
+                  setOpen={setOpen}
+                />
               </div>
-              
-            
-          
-          
+
+
+
+
 
             ) : (
-               <Link href="/SignIn">
-            <button className="text-white">Sign In </button>
-          </Link>
+              <Link href="/SignIn">
+                <button className="text-white">Sign In </button>
+              </Link>
 
             )
           }
-         
+
         </div>
       </div></>
   )

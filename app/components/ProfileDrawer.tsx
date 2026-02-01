@@ -62,9 +62,9 @@ export default function ProfileDrawer(
 
 
             {user ? (
-                <div className=" h-[100vh] mt-5 text-sm lg:text-lg lg:p-2  ">
+                <div className=" h-[100vh] mt-5 text-sm lg:text-lg lg:p-2 p-2  ">
                     <div className="sm:p-2 text-center">
-                        <strong className="p-2">Email </strong> {user.email}
+                        <strong className=" text-lg">👤</strong> {user.email}
                         <div className="font-semibold text-md p-2"><a href="/Orders"> My orders</a></div>
                         <div className="p-2"> <LogoutButton /></div>
                     </div>

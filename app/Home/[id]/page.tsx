@@ -163,7 +163,7 @@ export default function productPage() {
             <p className="mt-2 text-gray-500 text-lg">Rating: {product?.rating}</p>
 
 
-            <div className="ml-5 flex gap-4 mt-4">
+            <div className=" flex gap-4 mt-4">
 
               <ToggleFavourite productId={product?._id.toString() || ""} favourites={favourites} setFavourites={setFavourites} />
               {

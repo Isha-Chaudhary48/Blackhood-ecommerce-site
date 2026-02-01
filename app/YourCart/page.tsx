@@ -132,9 +132,9 @@ export default function YourCart() {
   return (<>
 
     {cartItems.length === 0 ? (
-      <div className="h-[50vh] flex flex-col justify-center items-center text-center">
-        <p className="font-semibold text-2xl">Hey, it feels so light! 🥺</p>
-        <p>There is nothing in your cart. Let's add some items</p>
+      <div className="h-[50vh] flex flex-col justify-center items-center text-center ">
+        <p className="font-semibold text-2xl ">Hey, it feels so light! 🥺</p>
+        <p className="sm:text-lg  ">There is nothing in your cart. Let's add some items</p>
       </div>
     ) : (
       <>
@@ -153,13 +153,13 @@ export default function YourCart() {
               <Link
 
                 href={`/Home/${item.product_id}`}
-                className=" flex justify-center items-center  gap-8   "
+                className=" flex justify-center items-center  md:gap-4  "
 
               >
 
 
 
-                <div className=" ">
+                <div className="p-2 ">
                   {item.image && (
                     <Image
                       src={item.image}
@@ -175,25 +175,29 @@ export default function YourCart() {
 
 
 
-                <div className="p-8">
+                <div className="p-4 md:p-8">
                   <CardTitle className="text-xl font-bold">{item.product_name}</CardTitle>
 
                   <span className="text-gray-500 text-lg">
                     {item.brand} {item.isNew && <Badge variant="outline">New</Badge>}
                   </span>
-                  <div className="font-semibold mt-2 flex  md:flex gap-2  ">
+                  <div className="font-semibold mt-2 flex  md:flex gap-1 sm: flex-col ">
                     <span className="mt-3">Size: {item.size}</span>
-                    <p style={{ backgroundColor: "orange" }} className="border border-2  flex justify-center  rounded-lg  ">
-                      <button onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        updateQuantity(item.id, item.quantity - 1)
-                      }} className="text-lg"> <FiMinus /></button> <span className="p-2"> {item.quantity}</span><button onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        updateQuantity(item.id, item.quantity + 1)
-                      }}><FiPlus /></button>
-                    </p>
+                    <div className="flex ">
+                      <div className="mt-2">Qty: </div>
+                      <div className=" ml-2 border border-2 border-orange-500  flex justify-center  rounded-lg  ">
+                        <button onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          updateQuantity(item.id, item.quantity - 1)
+                        }} className="text-lg"> <FiMinus /></button> <span className="p-2"> {item.quantity}</span><button onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          updateQuantity(item.id, item.quantity + 1)
+                        }}><FiPlus /></button>
+                      </div>
+
+                    </div>
 
                   </div>
                   <p className="mt-2 text-lg font-semibold">
@@ -218,7 +222,7 @@ export default function YourCart() {
 
           ))}
         </div>
-        <div className="flex justify-center"> <Card className="   h-auto sm:w-[70%] md:w-[50%] bg-orange-400   mt-4 p-4 text-black rounded-lg text-center  " >
+        <div className="flex justify-center"> <Card className="   h-auto sm:w-[70%] md:w-[50%] bg-orange-400   mt-4 p-4 text-black rounded-lg text-center mb-6" >
 
           <hr className="border border-1 border-white " ></hr>
           <p className=" text-lg">Price details:</p>
@@ -226,8 +230,9 @@ export default function YourCart() {
             Total price :  Rs. {(getTotalAmount()).toFixed(1)}
 
           </div>
+          <div>  <Button onClick={handlePayment} className=" bg-white text-black font-semibold hover:bg-black hover:text-white p-4 w-2/3 rounded-sm  " >Proceed to Order</Button></div>
 
-          <Button onClick={handlePayment} className=" bg-white text-black font-semibold hover:bg-black hover:text-white pb-4" >Prodceed to Order</Button>
+
         </Card></div>
 
 
