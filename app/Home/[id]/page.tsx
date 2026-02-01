@@ -37,7 +37,7 @@ export default function productPage() {
   const router = useRouter();
   const params = useParams();
   const productId = params?.id;
-  console.log(productId)
+
   const [product, setProduct] = useState<Product | null>(null);
 
   const { favourites, setFavourites, loading: favLoading } = FetchFavourites();
@@ -68,12 +68,12 @@ export default function productPage() {
     return (<>
       <Loading /></>)
   }
-  console.log(selectedSize)
+
 
 
   async function handleAddToCart() {
     if (!selectedSize) {
-      console.log("please select size first")
+
       toast.error("Please select a size first");
       return;
     }
@@ -84,7 +84,7 @@ export default function productPage() {
     }
 
     const pId = Array.isArray(productId) ? productId[0] : productId
-    console.log("pid", pId)
+
     try {
       setIsAdding(true)
 
