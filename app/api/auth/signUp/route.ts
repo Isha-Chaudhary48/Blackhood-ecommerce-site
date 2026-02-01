@@ -20,7 +20,7 @@ export async function POST(req: Request) {
             "INSERT INTO users(name,email,password,is_verified,verification_token) VALUES($1,$2,$3,$4,$5)", [name, email, hashedPassword, false, verification_token]
         );
 
-        const verifyLink = `http://localhost:3000/verify-email?token=${verification_token}`
+        const verifyLink = `https://blackhood-liart.vercel.app/verify-email?token=${verification_token}`
 
         await transporter.sendMail({
             from: `"Blackhood" <${process.env.EMAIL_USER}>`,
