@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
 import { loadRazorpay, openRazorpay } from "@/lib/razorpayClient";
 import { useRouter } from "next/navigation";
+import { join } from "path";
 
 export default function YourCart() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function YourCart() {
     if (!res.ok) {
       throw new Error("Failed to delete item");
     }
-    console.log(itemId);
+
 
     setCartItems(prev => prev.filter(item => item.id !== itemId));
 
@@ -100,6 +101,11 @@ export default function YourCart() {
 
 
     try {
+      const userRes = await fetch('/api/auth/me', {
+        credentials: "include"
+      })
+      const { user } = await userRes.json();
+
 
       const pendingPaymentRes = await fetch('/api/order/createPending', {
         method: 'POST',
@@ -114,10 +120,12 @@ export default function YourCart() {
         alert("Razorpay failed to load");
         return;
       }
-      console.log(data)
+
       openRazorpay({
         razorpayOrderId: data.razorpay_order_id,
         amount: data.amount,
+        userName: user?.name || "",
+        userEmail: user?.email || "",
         onSuccess: () => { router.push('/Orders') }
 
       });

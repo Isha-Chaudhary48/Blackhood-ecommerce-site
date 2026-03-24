@@ -34,9 +34,9 @@ export default function Navbar() {
     <>
       <div className="flex items-center justify-between p-4 md:p-8 bg-zinc-900 sm:p-4 md:p-8 sm:px-4 text-white mb-5  " >
         <Link href="/">
-          <h1 className="text-xl font-bold  ">Blackhood</h1>
+          <h1 className="text-lg md:text-xl font-bold  ">Blackhood</h1>
         </Link>
-        <div className="flex  sm:text-sm md:text-base md:gap-4  gap-2">
+        <div className="flex text-[12px] md:text-[14px] lg:text-[15px]  gap-2 lg:gap-4">
           <Link href="/Home">
             <button className="text-white ">Home </button>
           </Link>
