@@ -11,7 +11,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchUser = () => {
-      fetch('/api/me').then(async (res) => {
+      fetch('/api/auth/me').then(async (res) => {
         if (!res.ok) { return null };
         return res.json();
 

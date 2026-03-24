@@ -1,13 +1,11 @@
-export async function GetCurrentUser()
-{
-    const res = await fetch('api/me',
+export async function GetCurrentUser() {
+    const res = await fetch('api/auth/me',
         {
             credentials: "include",
         }
 
     )
-    if(!res.ok)
-    {
+    if (!res.ok) {
         return null;
     }
     const data = await res.json();
