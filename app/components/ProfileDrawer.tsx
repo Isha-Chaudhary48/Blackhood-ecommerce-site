@@ -5,6 +5,7 @@ import Footer from "./Footer";
 type User = {
     id: number;
     email: string;
+    name: string;
 };
 
 export default function ProfileDrawer(
@@ -20,14 +21,15 @@ export default function ProfileDrawer(
     const [user, setUser] = useState<User | null>(null);
 
     async function fetchUser() {
-        const res = await fetch("/api/me");
+        const res = await fetch("/api/auth/me");
         if (!res.ok) {
             setUser(null);
             return;
         }
         const data = await res.json();
-        console.log("hello", data)
-        setUser(data);
+        const { user } = data;
+        console.log("hello", user)
+        setUser(user);
 
 
     };
@@ -62,15 +64,17 @@ export default function ProfileDrawer(
 
 
             {user ? (
-                <div className=" h-[100vh] mt-5 text-sm lg:text-lg lg:p-2 p-2  ">
-                    <div className="sm:p-2 text-center">
-                        <strong className=" text-lg">👤</strong> {user.email}
+                <div className=" h-[100vh] mt-5 text-sm lg:text-lg lg:p-2  ">
+                    <div className="sm:p-2 text-center flex flex-col p-4">
+                        <strong className=" md:text-lg">{user.name}</strong>
+                        <div className=" md:text-lg pt-1"> {user.email}</div>
                         <div className="font-semibold text-md p-2"><a href="/Orders"> My orders</a></div>
                         <div className="p-2"> <LogoutButton /></div>
                     </div>
                     <div className=" absolute bottom-0 ">
                         <Footer />
                     </div>
+
 
 
 
