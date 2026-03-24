@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         const body = razorpayOrderId + "|" + razorpay_payment_id;
 
         const expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_TEST_KEY_SECRET!).update(body).digest('hex')
-        console.log(expectedSignature)
+
 
         if (expectedSignature !== razorpay_signature) {
             return NextResponse.json({

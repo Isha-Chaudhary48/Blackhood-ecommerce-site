@@ -15,10 +15,10 @@ export async function POST(req: Request) {
         if (!totalAmount || totalAmount <= 0) {
             return NextResponse.json({ message: "Invalid total amount" }, { status: 400 });
         }
-        console.log(totalAmount)
+
         const user = await getAuthUser();
         const user_id = user?.userId;
-        console.log(user_id)
+
         if (!user_id) {
             return NextResponse.json({
                 message: " user id  required"
@@ -36,14 +36,14 @@ export async function POST(req: Request) {
         }
 
         const internalOrderId = res.rows[0].id.toString();
-        console.log("order id", internalOrderId);
+
 
         const razorpayOrder = await razorpay.orders.create({
             amount: Math.round(totalAmount * 100),
             currency: 'INR',
             receipt: "receipt_" + internalOrderId.slice(0, 20)
         })
-        console.log("razorpay order", razorpayOrder)
+
         if (!razorpayOrder) {
             console.log("Not found razorpayorder", razorpayOrder);
             return;
@@ -110,7 +110,7 @@ export async function GET(req: Request) {
        
        `, [user_id]
         )
-        console.log("orders", ordersRes)
+
         if (ordersRes.rowCount === 0) {
             return NextResponse.json([])
         }

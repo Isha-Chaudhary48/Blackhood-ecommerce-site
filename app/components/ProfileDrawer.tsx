@@ -28,7 +28,7 @@ export default function ProfileDrawer(
         }
         const data = await res.json();
         const { user } = data;
-        console.log("hello", user)
+
         setUser(user);
 
 

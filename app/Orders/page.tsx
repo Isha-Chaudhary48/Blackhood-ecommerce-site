@@ -21,7 +21,7 @@ export default function OrdersPage() {
                     method: 'GET',
                     credentials: "include"
                 });
-                console.log(res)
+
                 const data = await res.json();
                 if (!res.ok) {
                     throw new Error(data.message || "Failed to fetch orders")
@@ -32,7 +32,7 @@ export default function OrdersPage() {
 
             }
             catch (error) {
-                console.log("orders error", orders)
+                console.log("orders error", error)
             }
 
 
@@ -43,7 +43,7 @@ export default function OrdersPage() {
         return <Loading />
     }
 
-    console.log("user orders", orders)
+
 
 
     return (<>

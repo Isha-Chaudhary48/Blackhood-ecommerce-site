@@ -59,14 +59,6 @@ export async function POST(req: Request) {
 
         const productRes = await fetch(`https://blackhood-liart.vercel.app/api/productPage/${product_id}`)
         const product = await productRes.json();
-        console.log("product ", product.product.price)
-        console.log(cart_id);
-        console.log(product_id)
-        console.log(product.product.title);
-        console.log(quantity)
-        console.log(size);
-        console.log(product.product.price)
-        console.log(product.image)
 
         await client.query(
             "INSERT INTO cart_items(cart_id,product_id,product_name,price ,quantity,size,image) VALUES($1,$2,$3,$4,$5,$6,$7)",

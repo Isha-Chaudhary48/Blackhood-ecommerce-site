@@ -4,7 +4,7 @@ import { convertServerPatchToFullTree } from "next/dist/client/components/segmen
 
 export async function GET() {
     const user = await getAuthUser();
-    console.log("User from the route", user);
+
     if (!user) {
         return NextResponse.json({
             error: "Unauthorized"

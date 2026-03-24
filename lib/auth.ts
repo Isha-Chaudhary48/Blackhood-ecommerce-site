@@ -20,7 +20,7 @@ export async function getAuthUser(): Promise<JwtPayload | null> {
             token,
             process.env.JWT_SECRET!
         ) as JwtPayload;
-        console.log("Decoded jwt payload:", decoded)
+
         return {
             userId: decoded.userId,
             name: decoded.name,
