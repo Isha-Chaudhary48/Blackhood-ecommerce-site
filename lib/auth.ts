@@ -1,30 +1,36 @@
 import jwt from "jsonwebtoken"
 import { cookies } from "next/headers"
 
-type JwtPayload={
-    userId : number;
+
+type JwtPayload = {
+    userId: number;
+    name: string;
     email: string;
 };
-export  async function getAuthUser() : Promise<JwtPayload | null>
-{
+export async function getAuthUser(): Promise<JwtPayload | null> {
     const cookie = await cookies();
     const token = cookie.get("token")?.value;
 
-    if(!token)
-    {
+    if (!token) {
         return null;
     }
-    
-    try{
+
+    try {
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET!
         ) as JwtPayload;
-        return decoded;
+        console.log("Decoded jwt payload:", decoded)
+        return {
+            userId: decoded.userId,
+            name: decoded.name,
+            email: decoded.email
+        }
+
     }
     catch (err) {
-    console.log("JWT verification failed:", err);
-    return null;
-}
+        console.log("JWT verification failed:", err);
+        return null;
+    }
 
 }

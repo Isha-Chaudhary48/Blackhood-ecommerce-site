@@ -23,27 +23,36 @@ export const loadRazorpay = () => {
 export const openRazorpay = ({
     amount,
     razorpayOrderId,
+    userName,
+    userEmail,
     onSuccess
 
 }: {
 
     amount: number,
     razorpayOrderId: string,
+    userName?: string,
+    userEmail?: string,
     onSuccess?: () => void,
 }) => {
 
-    console.log("razor pay id ", razorpayOrderId
-    )
+
     const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_API_KEY!,
         amount: amount * 100,
         currency: "INR",
-        order_id: razorpayOrderId
+        order_id: razorpayOrderId,
+        name: userName || "Blackhood"
         ,
+        prefill: {
+            name: userName || "",
+            email: userEmail || "",
+            contact: ""
+        },
 
 
         handler: async function (response: any) {
-            console.log("Payment Success HIII ", response)
+
 
             const verifyPayment = await fetch('/api/payment/verify', {
                 method: 'POST',
@@ -77,6 +86,7 @@ export const openRazorpay = ({
         }
 
     };
+
     const rzp = new (window as any).Razorpay(options);
     rzp.open();
 
